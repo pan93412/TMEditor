@@ -1,0 +1,118 @@
+<!DOCTYPE HTML>
+<head>
+  <title>TeaMeowEditor - TMEditor | Concepts</title>
+  <meta charset='UTF-8'>
+</head>
+
+<body>
+  <div class='tmeditor'>
+    <textarea id='tmeditor_textarea' onkeyup='changeTxtCount()'></textarea><p />
+    <p>
+      共輸入 <span id='txtCount'></span> 個字。
+      <button onclick='doClear()'>清空</button>
+    </p>
+    <button onclick='bold()'>粗體</button>
+    <button onclick='italic()'>斜體</button>
+    <button onclick='mono()'>等寬體</button>
+    <button onclick='codeblock()'>程式碼區塊</button>
+    <button onclick='save()' class='important' id='saveBtn'>儲存</button><br />
+    <button onclick='link()'>連結</button>
+    <button onclick='img()'>圖片</button>
+    <button onclick='at()'>標註</button>
+    <button onclick='app2EA(":thinking:")'>思考貼圖</button>
+  </div>
+</body>
+
+<style>
+textarea {
+  width: 35em;
+  height: 20em;
+  font-family: monospace;
+}
+
+button {
+  margin-right: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+button.important {
+  width: 3rem;
+  height: 3rem;
+  float: right;
+}
+
+.tmeditor {
+  width: 35em;
+  margin: 0 auto;
+}
+
+#txtCount {
+  font-family: monospace;
+}
+</style>
+
+<script>
+const tmeEditArea = document.querySelector('#tmeditor_textarea')
+const saveBtn = document.querySelector('#saveBtn')
+
+function app2EA(text) {
+  tmeEditArea.value += text
+}
+
+function prom(promptTxt) {
+  return window.prompt(promptTxt += ': ')
+}
+
+function bold() {
+  app2EA('****')
+}
+
+function italic() {
+  app2EA('____')
+}
+
+function mono() {
+  app2EA('``')
+}
+
+function codeblock() {
+  const lang = prom('請輸入語言 (ex. python)') || ''
+  app2EA("\n```" + lang + "\n```\n")
+}
+
+function link() {
+  app2EA(`[${prom('請輸入連結名稱') || ''}](${prom('請輸入或複製連結') || ''})`)
+}
+
+function img() {
+  app2EA(`\n![${prom('請輸入圖片描述') || ''}](${prom('請輸入或複製圖片連結') || ''})\n`)
+}
+
+function at() {
+  app2EA(` @${prom('請輸入要標註的人')} `)
+}
+
+function changeTxtCount() {
+  document.querySelector('#txtCount').innerHTML = tmeEditArea.value.length
+}
+
+function save() {
+  window.localStorage.setItem('tmeditor_text', tmeEditArea.value)
+  saveBtn.innerHTML = '儲存完成!'
+  setTimeout(() => {
+    saveBtn.innerHTML = '儲存'
+  }, 2000)
+}
+
+function doClear() {
+  window.localStorage.clear()
+  tmeEditArea.value = ''
+  changeTxtCount()
+}
+
+// first startup to do
+(function() {
+  tmeEditArea.value = window.localStorage.getItem('tmeditor_text')
+  changeTxtCount()
+})()
+</script>
