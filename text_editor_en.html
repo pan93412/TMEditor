@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<head>
+  <title>TeaMeowEditor - TMEditor | Concepts</title>
+  <meta charset='UTF-8'>
+</head>
+
+<body>
+  <div class='tmeditor'>
+    <textarea id='tmeditor_textarea'
+      onkeyup='changeTxtCount()'
+    ></textarea><p />
+    <p>
+      Text count: <span id='txtCount'></span>
+      <button onclick='doClear()'>Clear</button>
+    </p>
+    <button onclick='bold()'><b>B</b></button>
+    <button onclick='italic()'><i>I</i></button>
+    <button onclick='mono()'><code>M</code></button>
+    <button onclick='link()'><a href='javascript:void(0)'>Link</a></button>
+    <button onclick='img()'>Img</button>
+  </div>
+</body>
+
+<style>
+textarea {
+  width: 25em;
+  height: 12em;
+  font-family: monospace;
+  font-size: 16px;
+}
+
+button {
+  margin-right: 0.25rem;
+  margin-bottom: 0.25rem;
+  padding-left: 0.4rem;
+  padding-right: 0.4rem;
+}
+
+.tmeditor {
+  width: 25em;
+  margin: 0 auto;
+}
+</style>
+
+<script>
+const tmeEditArea = document.querySelector('#tmeditor_textarea')
+const saveBtn = document.querySelector('#saveBtn')
+
+// functions
+const changeTxtCount = () => {document.querySelector('#txtCount').innerHTML = tmeEditArea.value.length}
+const app2EA = text => {
+  tmeEditArea.value += text
+  changeTxtCount()
+}
+const prom = promptTxt => window.prompt(promptTxt += ': ')
+
+// buttons
+const bold = () => app2EA('****')
+const italic = () => app2EA('____')
+const mono = () => app2EA('``')
+const link = () => app2EA(`[${prom('Input the link description') || ''}](${prom('Input or copy the link') || ''})`)
+const img = () => app2EA(`\n![${prom('Input the image description') || ''}](${prom('Input or copy the image link') || ''})\n`)
+const doClear = () => {
+  tmeEditArea.value = ''
+  changeTxtCount()
+}
+
+changeTxtCount()
+</script>
