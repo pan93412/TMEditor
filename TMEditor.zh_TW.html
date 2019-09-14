@@ -55,6 +55,7 @@ button {
 </style>
 
 <script src='markdown-it.js'></script>
+<script src='introduction.js'></script>
 <script>
 const tmeEditArea = document.querySelector('#tmeditor_textarea')
 const saveBtn = document.querySelector('#saveBtn')
@@ -85,5 +86,6 @@ const doClear = () => {
   changeTxtCount()
 }
 
+tmeEditArea.value = intro
 upd()
 </script>
