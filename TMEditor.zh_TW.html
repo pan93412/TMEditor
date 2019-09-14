@@ -6,18 +6,22 @@
 
 <body>
   <div class='tmeditor'>
-    <textarea id='tmeditor_textarea'
-      onkeyup='changeTxtCount()'
-    ></textarea><p />
-    <p>
-      <span id='txtCount'></span> 字
-      <button onclick='doClear()'>清空</button>
-    </p>
-    <button onclick='bold()'><b>粗</b></button>
-    <button onclick='italic()'><i>斜</i></button>
-    <button onclick='mono()'><code>M</code></button>
-    <button onclick='link()'><a href='javascript:void(0)'>連結</a></button>
-    <button onclick='img()'>圖</button>
+    <div class='editor'>
+      <textarea id='tmeditor_textarea'
+        onkeyup='upd()'
+        onchange='upd()'
+      ></textarea><p />
+      <p>
+        <span id='txtCount'></span> 字
+        <button onclick='doClear()'>清空</button>
+      </p>
+      <button onclick='bold()'><b>粗</b></button>
+      <button onclick='italic()'><i>斜</i></button>
+      <button onclick='mono()'><code>M</code></button>
+      <button onclick='link()'><a href='javascript:void(0)'>連結</a></button>
+      <button onclick='img()'>圖</button>
+    </div>
+    <div id='renderResult'></div>
   </div>
 </body>
 
@@ -40,30 +44,46 @@ button {
   width: 25em;
   margin: 0 auto;
 }
+
+#renderResult {
+  border: 1px solid black;
+  border-radius: 1px;
+  padding: 2px;
+  margin-top: 2rem;
+  overflow: auto;
+}
 </style>
 
+<script src='markdown-it.js'></script>
 <script>
 const tmeEditArea = document.querySelector('#tmeditor_textarea')
 const saveBtn = document.querySelector('#saveBtn')
+const renderBox = document.querySelector('#renderResult')
+const mdit = markdownit()
 
 // functions
 const changeTxtCount = () => {document.querySelector('#txtCount').innerHTML = tmeEditArea.value.length}
 const app2EA = text => {
   tmeEditArea.value += text
-  changeTxtCount()
+  upd()
 }
 const prom = promptTxt => window.prompt(promptTxt += ': ')
 
 // buttons
 const bold = () => app2EA('****')
-const italic = () => app2EA('____')
+const italic = () => app2EA('__')
 const mono = () => app2EA('``')
 const link = () => app2EA(`[${prom('請輸入連結名稱') || ''}](${prom('請輸入或複製連結') || ''})`)
 const img = () => app2EA(`\n![${prom('請輸入圖片描述') || ''}](${prom('請輸入或複製圖片連結') || ''})\n`)
+const upd = () => {
+  changeTxtCount()
+  renderBox.innerHTML = mdit.render(tmeEditArea.value)
+}
 const doClear = () => {
   tmeEditArea.value = ''
+  renderBox.innerHTML = ''
   changeTxtCount()
 }
 
-changeTxtCount()
+upd()
 </script>
